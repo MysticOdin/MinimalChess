@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>GameScreen.qml</file>
+        <file>SaveDialog.qml</file>
+        <file>LoadDialog.qml</file>
+    </qresource>
+</RCC>

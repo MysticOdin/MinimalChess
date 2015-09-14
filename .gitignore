@@ -1,0 +1,9 @@
+*.o
+*.exe
+debug/*
+MinimalChess.pro.user
+Makefile
+Makefile.Debug
+Makefile.Release
+object_script.*
+release/*
