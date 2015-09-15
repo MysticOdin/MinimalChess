@@ -290,6 +290,11 @@ bool Board::moveNext()
         Place* nextPlace = getPlaceByCoord(currentMove->endColumn,
                                            currentMove->endRow);
         currentPlace->getOccupyingPiece()->movePiece(nextPlace);
+        if(currentMove->mvType == EN_PASSANT)
+        {
+            getPlaceByCoord(currentMove->endColumn,
+                            currentMove->startRow)->setOccupyingPiece(nullptr);
+        }
         currentMove++;
         turn = (turn + 1) & 1;
         returned = true;
@@ -317,6 +322,11 @@ bool Board::movePrevious()
         }
         if(currentMove->capturedPiece != nullptr)
         {
+            if(currentMove->mvType == EN_PASSANT)
+            {
+                currentPlace = getPlaceByCoord(currentMove->endColumn,
+                                               currentMove->startRow);
+            }
             currentPlace->setOccupyingPiece(currentMove->capturedPiece);
         }
         turn = (turn + 1) & 1;
