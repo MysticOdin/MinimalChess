@@ -133,7 +133,7 @@ Item {
         Rectangle
         {
             color: "transparent"
-            radius: 3
+            radius: 5
             border.color: "black"
             Layout.columnSpan: parent.columns
             Layout.alignment: Qt.AlignCenter
@@ -145,7 +145,9 @@ Item {
                 text: labelMessages[activeMessage]
                 font.pixelSize: 22
                 font.italic: true
-                color: "steelblue"
+                font.bold: true
+                color: "maroon"
+                style: "Raised"
                 anchors.centerIn: parent
             }
         }
