@@ -35,8 +35,9 @@ typedef enum
 {
     NOT_ALLOWED,
     ALLOWED,
-    CASTLE,
-    EN_PASSANT
+    EN_PASSANT,
+    RIGHT_CASTLE,
+    LEFT_CASTLE
 } MoveType;
 
 #endif // CHESSGENERICTYPES

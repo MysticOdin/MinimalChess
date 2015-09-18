@@ -55,33 +55,37 @@ MoveType King::checkMoveAllowed(Place *place)
         {
             coord_t middle_column = (this_column+next_column)/2;
             Place* middle_place = board->getPlaceByCoord(
-                        this_row, middle_column);
+                        middle_column, this_row);
             if(  (middle_place->getOccupyingPiece() == nullptr)
                &&(board->isPlaceChecked(middle_place) == false))
             {
                 IPiece * castling_piece = nullptr;
-                if(middle_column == COLUMN_G) //right castle
+                if(middle_column == COLUMN_F) //right castle
                 {
                     castling_piece =
-                            board->getPlaceByCoord(this_row, COLUMN_H)
+                            board->getPlaceByCoord(COLUMN_H, this_row)
                                  ->getOccupyingPiece();
+                    if(  (castling_piece != nullptr)
+                       &&(castling_piece->isPieceFirstMove() == true))
+                    {
+                        returned = RIGHT_CASTLE;
+                    }
                 }
                 else // left castle
                 {
-                    if(board->getPlaceByCoord(this_row, COLUMN_B)
+                    if(board->getPlaceByCoord(COLUMN_B, this_row)
                              ->getOccupyingPiece() == nullptr)
                     {
                         castling_piece =
-                                board->getPlaceByCoord(this_row, COLUMN_A)
+                                board->getPlaceByCoord(COLUMN_A, this_row)
                                      ->getOccupyingPiece();
+                        if(  (castling_piece != nullptr)
+                           &&(castling_piece->isPieceFirstMove() == true))
+                        {
+                            returned = LEFT_CASTLE;
+                        }
                     }
                 }
-                if(  (castling_piece != nullptr)
-                   &&(castling_piece->isPieceFirstMove() == true))
-                {
-                    returned = CASTLE;
-                }
-
             }
         }
     }

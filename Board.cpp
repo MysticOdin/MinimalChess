@@ -156,6 +156,19 @@ bool Board::movePiece(Place* src, Place* dist)
                                               capturedPawnPlace,
                                               mt);
             break;
+        case RIGHT_CASTLE:
+            appendMove(src, dist, nullptr, mt);
+            board[src->getRow()][COLUMN_H]
+                    ->getOccupyingPiece()
+                    ->movePiece(board[src->getRow()][COLUMN_F]);
+            returned = true;
+            break;
+        case LEFT_CASTLE:
+            appendMove(src, dist, nullptr, mt);
+            board[src->getRow()][COLUMN_A]
+                    ->getOccupyingPiece()
+                    ->movePiece(board[src->getRow()][COLUMN_D]);
+            returned = true;
         default:
             break;
         }
@@ -328,10 +341,24 @@ bool Board::moveNext()
         Place* nextPlace = getPlaceByCoord(currentMove->endColumn,
                                            currentMove->endRow);
         currentPlace->getOccupyingPiece()->movePiece(nextPlace);
-        if(currentMove->mvType == EN_PASSANT)
+        switch(currentMove->mvType)
         {
+        case EN_PASSANT:
             getPlaceByCoord(currentMove->endColumn,
                             currentMove->startRow)->setOccupyingPiece(nullptr);
+            break;
+        case RIGHT_CASTLE:
+            board[currentPlace->getRow()][COLUMN_H]
+                           ->getOccupyingPiece()
+                           ->movePiece(board[currentPlace->getRow()][COLUMN_F]);
+            break;
+        case LEFT_CASTLE:
+            board[currentPlace->getRow()][COLUMN_A]
+                           ->getOccupyingPiece()
+                           ->movePiece(board[currentPlace->getRow()][COLUMN_D]);
+            break;
+        default:
+            break;
         }
         currentMove++;
         turn = (turn + 1) & 1;
@@ -366,6 +393,18 @@ bool Board::movePrevious()
                                                currentMove->startRow);
             }
             currentPlace->setOccupyingPiece(currentMove->capturedPiece);
+        }
+        else if(currentMove->mvType == RIGHT_CASTLE)
+        {
+            board[nextPlace->getRow()][COLUMN_F]
+                    ->getOccupyingPiece()
+                    ->movePiece(board[nextPlace->getRow()][COLUMN_H]);
+        }
+        else if(currentMove->mvType == LEFT_CASTLE)
+        {
+            board[nextPlace->getRow()][COLUMN_D]
+                    ->getOccupyingPiece()
+                    ->movePiece(board[nextPlace->getRow()][COLUMN_A]);
         }
         turn = (turn + 1) & 1;
         returned = true;
