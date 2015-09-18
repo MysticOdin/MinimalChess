@@ -121,6 +121,7 @@ void Board::appendMove(Place* src,
 bool Board::movePiece(Place* src, Place* dist)
 {
     bool returned = false;
+    Place * capturedPawnPlace;
     IPiece* movedPiece = src->getOccupyingPiece();
     IPiece* piece = dist->getOccupyingPiece();
     if((movedPiece != nullptr) && (movedPiece->getPieceSide() == turn))
@@ -129,23 +130,60 @@ bool Board::movePiece(Place* src, Place* dist)
         switch(mt)
         {
         case ALLOWED:
-            appendMove(src,dist,piece,mt);
-            returned = true;
+            if(willKingBeChecked(src, dist, dist, turn) == true)
+            {
+                returned = false;
+            }
+            else
+            {
+                appendMove(src,dist,piece,mt);
+                returned = true;
+            }
             break;
         case EN_PASSANT:
-            appendMove(src,
-                       dist,
-                       board[src->getRow()][dist->getColumn()]
-                            ->getOccupyingPiece(),
-                       mt);
-            board[src->getRow()][dist->getColumn()]->setOccupyingPiece(nullptr);
-            returned = true;
-
+            capturedPawnPlace = board[src->getRow()][dist->getColumn()];
+            if(willKingBeChecked(src, dist, capturedPawnPlace, turn) == true)
+            {
+                returned = false;
+            }
+            else
+            {
+                appendMove(src,
+                           dist,
+                           capturedPawnPlace->getOccupyingPiece(),
+                           mt);
+                capturedPawnPlace->setOccupyingPiece(nullptr);
+                returned = true;
+            }
             break;
         default:
             break;
         }
     }
+    return returned;
+}
+
+bool Board::willKingBeChecked(Place* src,
+                              Place* dist,
+                              Place* capturedPiecePlace,
+                              side_t side)
+{
+    bool returned = false;
+    IPiece * capturedPiece = capturedPiecePlace->getOccupyingPiece();
+    IPiece * movedPiece = src->getOccupyingPiece();
+    bool isPieceFirstMove = movedPiece->isPieceFirstMove();
+    capturedPiecePlace->setOccupyingPiece(nullptr);
+    movedPiece->movePiece(dist);
+    returned = this->isPlaceChecked(kings[side]->getPiecePlace(), side);
+    if(isPieceFirstMove == true)
+    {
+        movedPiece->resetPiece(src);
+    }
+    else
+    {
+        movedPiece->movePiece(src);
+    }
+    capturedPiecePlace->setOccupyingPiece(capturedPiece);
     return returned;
 }
 

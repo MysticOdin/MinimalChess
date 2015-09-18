@@ -30,6 +30,10 @@ private:
                     Place* dist,
                     IPiece* capturedPiece,
                     MoveType mvType);
+    bool willKingBeChecked(Place *src,
+                           Place *dist,
+                           Place *capturedPiecePlace,
+                           side_t side);
     Place* board[8][8];
     King* kings[2];
     side_t turn;
