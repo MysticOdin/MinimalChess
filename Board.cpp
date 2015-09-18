@@ -155,6 +155,10 @@ bool Board::movePiece(Place* src, Place* dist)
                                               dist,
                                               capturedPawnPlace,
                                               mt);
+            if(returned == true)
+            {
+                capturedPawnPlace->setOccupyingPiece(nullptr);
+            }
             break;
         case RIGHT_CASTLE:
             appendMove(src, dist, nullptr, mt);
