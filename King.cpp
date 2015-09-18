@@ -36,7 +36,7 @@ Place *King::getPiecePlace()
 MoveType King::checkMoveAllowed(Place *place)
 {
     MoveType returned = NOT_ALLOWED;
-    if(board->isPlaceChecked(place, this->side) == false)
+    if(board->isPlaceChecked(place) == false)
     {
         coord_t this_row = piecePlace->getRow();
         coord_t this_column = piecePlace->getColumn();
@@ -51,13 +51,13 @@ MoveType King::checkMoveAllowed(Place *place)
         else if (  (diff_column == 2)
                  &&(diff_row == 0)
                  &&(isFirstMove == true)
-                 &&(board->isPlaceChecked(piecePlace, this->side) == false))
+                 &&(board->isPlaceChecked(piecePlace) == false))
         {
             coord_t middle_column = (this_column+next_column)/2;
             Place* middle_place = board->getPlaceByCoord(
                         this_row, middle_column);
             if(  (middle_place->getOccupyingPiece() == nullptr)
-               &&(board->isPlaceChecked(middle_place, this->side) == false))
+               &&(board->isPlaceChecked(middle_place) == false))
             {
                 IPiece * castling_piece = nullptr;
                 if(middle_column == COLUMN_G) //right castle

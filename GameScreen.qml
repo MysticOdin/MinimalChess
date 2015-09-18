@@ -5,12 +5,16 @@ import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 
 Item {
-    width: 480
-    height: 520
+    width: parent.width
+    height: parent.height
     readonly property int white: 0
     readonly property int black: 1
     readonly property int activeGame: 0
     readonly property int loadedGame: 1
+    readonly property int noMessage: 0
+    readonly property int check: 1
+    readonly property int checkmate: 2
+    readonly property variant labelMessages: ["", "Check!", "Checkmate!"]
     readonly property variant colors: ["white", "maroon"]
     readonly property variant pieceColor: ["white", "black"]
     readonly property variant pieceStyle: [Text.Outline, Text.Normal]
@@ -19,12 +23,14 @@ Item {
 
     property int gameStyle: loadedGame
     property bool gameStarted: false
+    property int activeMessage: noMessage
 
 
     GridLayout {
         id: mainLayout
         columns: 2
         anchors.centerIn: parent
+
         rowSpacing: 20
         Item {
             height: startButton.height
@@ -83,6 +89,7 @@ Item {
                                 saveButton.enabled = true
                                 stopButton.enabled = true
                                 updateBoard()
+                                activeMessage = MainBoard.getCheckStatus()
                             }
                         }
                     }
@@ -123,6 +130,25 @@ Item {
                 onClicked: saveButtonClicked()
             }
         }
+        Rectangle
+        {
+            color: "transparent"
+            radius: 3
+            border.color: "black"
+            Layout.columnSpan: parent.columns
+            Layout.alignment: Qt.AlignCenter
+            height: messageLabel.height
+            anchors.left: parent.left
+            anchors.right: parent.right
+            Label {
+                id: messageLabel
+                text: labelMessages[activeMessage]
+                font.pixelSize: 22
+                font.italic: true
+                color: "steelblue"
+                anchors.centerIn: parent
+            }
+        }
 
     }
     function getColorIndex(idx) {
@@ -153,6 +179,7 @@ Item {
         {
             stopButton.enabled = MainBoard.canMovePrevious();
             saveButton.enabled = MainBoard.canMoveNext();
+            activeMessage = MainBoard.getCheckStatus()
         }
     }
     function stopGame() {

@@ -16,7 +16,7 @@ public:
     ~Board(void);
     bool movePiece(Place* src, Place* dist);
     bool isPathClear(Place* place1, Place* place2);
-    bool isPlaceChecked(Place* place, side_t side);
+    bool isPlaceChecked(Place* place);
     bool promote(Place* place, Pawn* pawn);
     Place* getPlaceByCoord(coord_t column, coord_t row);
     void getLastMoveCoord(coord_t* column, coord_t* row);
@@ -25,6 +25,7 @@ public:
     bool atStart(void);
     bool moveNext(void);
     bool movePrevious(void);
+    check_status_t getCheckStatus(void);
 private:
     void appendMove(Place* src,
                     Place* dist,
@@ -33,12 +34,10 @@ private:
     bool checkKingAndAppendMove(Place *src,
                                 Place *dist,
                                 Place *capturedPiecePlace,
-                                side_t side,
                                 MoveType mt);
     bool willKingBeChecked(Place *src,
                            Place *dist,
-                           Place *capturedPiecePlace,
-                           side_t side);
+                           Place *capturedPiecePlace);
     Place* board[8][8];
     King* kings[2];
     side_t turn;

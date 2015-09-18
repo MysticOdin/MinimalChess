@@ -25,6 +25,7 @@ public:
     Q_INVOKABLE bool canMovePrevious(void);
     Q_INVOKABLE bool issueMoveNext(void);
     Q_INVOKABLE bool issueMovePrevious(void);
+    Q_INVOKABLE int getCheckStatus(void);
     template<typename T,typename V>
     bool selectSquare(T,V) = delete;
 

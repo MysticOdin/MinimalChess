@@ -121,11 +121,10 @@ void Board::appendMove(Place* src,
 bool Board::checkKingAndAppendMove(Place* src,
                                    Place* dist,
                                    Place* capturedPiecePlace,
-                                   side_t side,
                                    MoveType mt)
 {
     bool returned = false;
-    if(willKingBeChecked(src, dist, capturedPiecePlace, side) == true)
+    if(willKingBeChecked(src, dist, capturedPiecePlace) == true)
     {
         returned = false;
     }
@@ -148,14 +147,13 @@ bool Board::movePiece(Place* src, Place* dist)
         switch(mt)
         {
         case ALLOWED:
-            returned = checkKingAndAppendMove(src, dist, dist, turn, mt);
+            returned = checkKingAndAppendMove(src, dist, dist, mt);
             break;
         case EN_PASSANT:
             capturedPawnPlace = board[src->getRow()][dist->getColumn()];
             returned = checkKingAndAppendMove(src,
                                               dist,
                                               capturedPawnPlace,
-                                              turn,
                                               mt);
             break;
         default:
@@ -167,8 +165,7 @@ bool Board::movePiece(Place* src, Place* dist)
 
 bool Board::willKingBeChecked(Place* src,
                               Place* dist,
-                              Place* capturedPiecePlace,
-                              side_t side)
+                              Place* capturedPiecePlace)
 {
     bool returned = false;
     IPiece * capturedPiece = capturedPiecePlace->getOccupyingPiece();
@@ -176,7 +173,7 @@ bool Board::willKingBeChecked(Place* src,
     bool isPieceFirstMove = movedPiece->isPieceFirstMove();
     capturedPiecePlace->setOccupyingPiece(nullptr);
     movedPiece->movePiece(dist);
-    returned = this->isPlaceChecked(kings[side]->getPiecePlace(), side);
+    returned = this->isPlaceChecked(kings[turn]->getPiecePlace());
     if(isPieceFirstMove == true)
     {
         movedPiece->resetPiece(src);
@@ -237,13 +234,13 @@ bool Board::isPathClear(Place *place1, Place *place2)
     return returned;
 }
 
-bool Board::isPlaceChecked(Place *place, side_t side)
+bool Board::isPlaceChecked(Place *place)
 {
     bool returned = false;
     bool created_dummy = false;
     if(place->getOccupyingPiece() == nullptr)
     {
-        place->setOccupyingPiece(new Pawn(side, place, this));
+        place->setOccupyingPiece(new Pawn(turn, place, this));
         created_dummy = true;
     }
     for(int i = 0; (i < 8) && (returned == false); i++)
@@ -252,7 +249,7 @@ bool Board::isPlaceChecked(Place *place, side_t side)
         {
             IPiece * tested_piece = board[i][j]->getOccupyingPiece();
             if(  (tested_piece != nullptr)
-               &&(tested_piece->getPieceSide() != side))
+               &&(tested_piece->getPieceSide() != turn))
             {
                 if(tested_piece == kings[BLACK_SIDE])
                 {
@@ -372,6 +369,70 @@ bool Board::movePrevious()
         }
         turn = (turn + 1) & 1;
         returned = true;
+    }
+    return returned;
+}
+
+check_status_t Board::getCheckStatus()
+{
+    check_status_t returned = NOT_CHECKED;
+    if(isPlaceChecked(kings[turn]->getPiecePlace()))
+    {
+        returned = CHECKMATE;
+        for(int temp_row = 0;
+            (temp_row < 8) && (returned == CHECKMATE);
+            temp_row++)
+        {
+            for(int temp_column = 0;
+                (temp_column < 8) && (returned == CHECKMATE);
+                temp_column++)
+            {
+                Place * src = board[temp_row][temp_column];
+                IPiece * currentPiece = src->getOccupyingPiece();
+                if(  (currentPiece != nullptr)
+                   &&(currentPiece->getPieceSide() == turn))
+                {
+                    for(int row = 0;
+                        (row < 8) && (returned == CHECKMATE);
+                        row++)
+                    {
+                        for(int column = 0;
+                            (column < 8) && (returned == CHECKMATE);
+                            column++)
+                        {
+                            Place * dist = board[row][column];
+                            MoveType mt = currentPiece->isMoveAllowed(dist);
+                            if(mt != NOT_ALLOWED)
+                            {
+                                if(currentPiece == kings[turn])
+                                {
+                                    // to avoid having to call willKingBeChecked
+                                    // and the loop inside isPlaceChecked for no
+                                    // reason
+                                    returned = CHECK;
+                                }
+                                else
+                                {
+                                    Place * capturedPiecePlace = dist;
+                                    if(mt == EN_PASSANT)
+                                    {
+                                        capturedPiecePlace =
+                                        board[src->getRow()][dist->getColumn()];
+                                    }
+                                    if(willKingBeChecked
+                                            (src,
+                                             dist,
+                                             capturedPiecePlace) == false)
+                                    {
+                                        returned = CHECK;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     return returned;
 }

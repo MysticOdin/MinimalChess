@@ -6,18 +6,18 @@ import QtQuick.Dialogs 1.2
 ApplicationWindow {
     title: qsTr("Minimal Chess")
     width: 480
-    height: 520
+    height: 560
     visible: true
     minimumHeight: height
     maximumHeight: height
     minimumWidth: width
     maximumWidth: width
-
     property alias gameScreen: gameScreen
     property alias saveDialog: saveDialog
     property alias loadDialog: loadDialog
     property url chosenFile: ""
     menuBar: MenuBar {
+        id: menuBar
         Menu {
             title: qsTr("&File")
             MenuItem {

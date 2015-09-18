@@ -32,6 +32,16 @@ void BoardQObjectAbstraction::stopGame()
     this->selectedPlace = nullptr;
 }
 
+int BoardQObjectAbstraction::getCheckStatus()
+{
+    int returned = NOT_CHECKED;
+    if(this->board != nullptr)
+    {
+        returned = this->board->getCheckStatus();
+    }
+    return returned;
+}
+
 bool BoardQObjectAbstraction::selectSquare(int column, int row)
 {
     bool moveAccepted = false;

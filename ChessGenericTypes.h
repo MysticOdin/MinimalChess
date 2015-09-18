@@ -4,6 +4,7 @@
 
 typedef int coord_t;
 typedef int side_t;
+typedef int check_status_t;
 
 #define COLUMN_A 0
 #define COLUMN_B 1
@@ -25,6 +26,10 @@ typedef int side_t;
 
 #define WHITE_SIDE 0
 #define BLACK_SIDE 1
+
+#define NOT_CHECKED 0
+#define CHECK       1
+#define CHECKMATE   2
 
 typedef enum
 {
