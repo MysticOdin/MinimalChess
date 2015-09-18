@@ -100,7 +100,7 @@ Board::~Board()
 void Board::appendMove(Place* src,
                        Place* dist,
                        IPiece* capturedPiece,
-                       MoveType mvType)
+                       MoveType mt)
 {
     Move move;
     IPiece* movedPiece = src->getOccupyingPiece();
@@ -109,7 +109,7 @@ void Board::appendMove(Place* src,
     move.endRow = dist->getRow();
     move.endColumn = dist->getColumn();
     move.capturedPiece = capturedPiece;
-    move.mvType = mvType;
+    move.mvType = mt;
     move.firstMove = movedPiece->isPieceFirstMove();
     moveList.erase(currentMove,moveList.end());
     moveList.push_back(move);
@@ -118,43 +118,45 @@ void Board::appendMove(Place* src,
     turn = (turn + 1) & 1;
 }
 
+bool Board::checkKingAndAppendMove(Place* src,
+                                   Place* dist,
+                                   Place* capturedPiecePlace,
+                                   side_t side,
+                                   MoveType mt)
+{
+    bool returned = false;
+    if(willKingBeChecked(src, dist, capturedPiecePlace, side) == true)
+    {
+        returned = false;
+    }
+    else
+    {
+        appendMove(src,dist,capturedPiecePlace->getOccupyingPiece(),mt);
+        returned = true;
+    }
+    return returned;
+}
+
 bool Board::movePiece(Place* src, Place* dist)
 {
     bool returned = false;
     Place * capturedPawnPlace;
     IPiece* movedPiece = src->getOccupyingPiece();
-    IPiece* piece = dist->getOccupyingPiece();
     if((movedPiece != nullptr) && (movedPiece->getPieceSide() == turn))
     {
         MoveType mt = movedPiece->isMoveAllowed(dist);
         switch(mt)
         {
         case ALLOWED:
-            if(willKingBeChecked(src, dist, dist, turn) == true)
-            {
-                returned = false;
-            }
-            else
-            {
-                appendMove(src,dist,piece,mt);
-                returned = true;
-            }
+            returned = checkKingAndAppendMove(src, dist, dist, turn, mt);
             break;
         case EN_PASSANT:
             capturedPawnPlace = board[src->getRow()][dist->getColumn()];
-            if(willKingBeChecked(src, dist, capturedPawnPlace, turn) == true)
-            {
-                returned = false;
-            }
-            else
-            {
-                appendMove(src,
-                           dist,
-                           capturedPawnPlace->getOccupyingPiece(),
-                           mt);
-                capturedPawnPlace->setOccupyingPiece(nullptr);
-                returned = true;
-            }
+            returned = checkKingAndAppendMove(src,
+                                              dist,
+                                              capturedPawnPlace,
+                                              turn,
+                                              mt);
             break;
         default:
             break;

@@ -29,7 +29,12 @@ private:
     void appendMove(Place* src,
                     Place* dist,
                     IPiece* capturedPiece,
-                    MoveType mvType);
+                    MoveType mt);
+    bool checkKingAndAppendMove(Place *src,
+                                Place *dist,
+                                Place *capturedPiecePlace,
+                                side_t side,
+                                MoveType mt);
     bool willKingBeChecked(Place *src,
                            Place *dist,
                            Place *capturedPiecePlace,
