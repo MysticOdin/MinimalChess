@@ -70,11 +70,12 @@ Board::Board(void)
                 new Queen(BLACK_SIDE, board[ROW_8][COLUMN_D], this));
 
     // Kings
-    this->whiteKing = new King(WHITE_SIDE, board[ROW_1][COLUMN_E], this);
-    board[ROW_1][COLUMN_E]->setOccupyingPiece(whiteKing);
-    this->blackKing = new King(BLACK_SIDE, board[ROW_8][COLUMN_E], this);
-    board[ROW_8][COLUMN_E]->setOccupyingPiece(blackKing);
-
+    this->kings[WHITE_SIDE] =
+            new King(WHITE_SIDE, board[ROW_1][COLUMN_E], this);
+    board[ROW_1][COLUMN_E]->setOccupyingPiece(kings[WHITE_SIDE]);
+    this->kings[BLACK_SIDE]
+            = new King(BLACK_SIDE, board[ROW_8][COLUMN_E], this);
+    board[ROW_8][COLUMN_E]->setOccupyingPiece(kings[BLACK_SIDE]);
 }
 
 Board::~Board()
@@ -213,13 +214,13 @@ bool Board::isPlaceChecked(Place *place, side_t side)
             if(  (tested_piece != nullptr)
                &&(tested_piece->getPieceSide() != side))
             {
-                if(tested_piece == blackKing)
+                if(tested_piece == kings[BLACK_SIDE])
                 {
-                    returned = blackKing->isCheckedPlace(place);
+                    returned = kings[BLACK_SIDE]->isCheckedPlace(place);
                 }
-                else if(tested_piece == whiteKing)
+                else if(tested_piece == kings[WHITE_SIDE])
                 {
-                    returned = whiteKing->isCheckedPlace(place);
+                    returned = kings[WHITE_SIDE]->isCheckedPlace(place);
                 }
                 else if(tested_piece->isMoveAllowed(place) != NOT_ALLOWED)
                 {

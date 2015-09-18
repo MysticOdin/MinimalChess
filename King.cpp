@@ -28,6 +28,11 @@ bool King::isCheckedPlace(Place *place)
     return returned;
 }
 
+Place *King::getPiecePlace()
+{
+    return piecePlace;
+}
+
 MoveType King::checkMoveAllowed(Place *place)
 {
     MoveType returned = NOT_ALLOWED;

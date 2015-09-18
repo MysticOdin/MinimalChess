@@ -31,8 +31,7 @@ private:
                     IPiece* capturedPiece,
                     MoveType mvType);
     Place* board[8][8];
-    King* blackKing;
-    King* whiteKing;
+    King* kings[2];
     side_t turn;
     std::list<Move> moveList;
     std::list<Move>::iterator currentMove;
