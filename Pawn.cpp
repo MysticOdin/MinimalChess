@@ -64,7 +64,8 @@ MoveType Pawn::checkMoveAllowed(Place *place)
                 IPiece * adjacent_piece  =
                         board->getPlaceByCoord(next_column, this_row)
                              ->getOccupyingPiece();
-                if(adjacent_piece->isPiecePawn() == true)
+                if(  (adjacent_piece->isPiecePawn() == true)
+                   &&(adjacent_piece->isPieceFirstMove() == true))
                 {
                     returned = EN_PASSANT;
                 }
