@@ -3,8 +3,7 @@
 #include "Board.h"
 #include "Place.h"
 
-Bishop::Bishop(side_t c_side, Place* place, Board* c_board)
-    : IPiece(c_side, place, c_board, false)
+Bishop::Bishop(side_t c_side, Place* place, Board* c_board) : IPiece(c_side, place, c_board, false)
 {
 }
 

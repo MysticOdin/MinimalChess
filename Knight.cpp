@@ -2,8 +2,7 @@
 #include "Knight.h"
 #include "stdlib.h"
 
-Knight::Knight(side_t c_side, Place* place, Board* c_board)
-    : IPiece(c_side, place, c_board, false)
+Knight::Knight(side_t c_side, Place* place, Board* c_board) : IPiece(c_side, place, c_board, false)
 {
 }
 

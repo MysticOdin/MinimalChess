@@ -5,9 +5,7 @@ Place::Place(coord_t column, coord_t row) : m_column(column), m_row(row)
 {
     occupyingPiece = nullptr;
 }
-Place::Place(coord_t column,
-             coord_t row,
-             IPiece* piece) : m_column(column), m_row(row)
+Place::Place(coord_t column, coord_t row, IPiece* piece) : m_column(column), m_row(row)
 {
     occupyingPiece = piece;
 }

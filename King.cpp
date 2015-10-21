@@ -2,8 +2,7 @@
 #include "King.h"
 #include "Board.h"
 #include "Place.h"
-King::King(side_t c_side, Place* place, Board* c_board)
-    : IPiece(c_side, place, c_board, false)
+King::King(side_t c_side, Place* place, Board* c_board) : IPiece(c_side, place, c_board, false)
 {
 }
 
@@ -53,18 +52,14 @@ MoveType King::checkMoveAllowed(Place *place)
                  &&(isFirstMove == true)
                  &&(board->isPlaceChecked(piecePlace) == false))
         {
-            coord_t middle_column = (this_column+next_column)/2;
-            Place* middle_place = board->getPlaceByCoord(
-                        middle_column, this_row);
-            if(  (middle_place->getOccupyingPiece() == nullptr)
-               &&(board->isPlaceChecked(middle_place) == false))
+            coord_t middle_column = (this_column + next_column)/2;
+            Place* middle_place = board->getPlaceByCoord(middle_column, this_row);
+            if((middle_place->getOccupyingPiece() == nullptr) && (board->isPlaceChecked(middle_place) == false))
             {
                 IPiece * castling_piece = nullptr;
                 if(middle_column == COLUMN_F) //right castle
                 {
-                    castling_piece =
-                            board->getPlaceByCoord(COLUMN_H, this_row)
-                                 ->getOccupyingPiece();
+                    castling_piece = board->getPlaceByCoord(COLUMN_H, this_row)->getOccupyingPiece();
                     if(  (castling_piece != nullptr)
                        &&(castling_piece->isPieceFirstMove() == true))
                     {
@@ -76,11 +71,8 @@ MoveType King::checkMoveAllowed(Place *place)
                     if(board->getPlaceByCoord(COLUMN_B, this_row)
                              ->getOccupyingPiece() == nullptr)
                     {
-                        castling_piece =
-                                board->getPlaceByCoord(COLUMN_A, this_row)
-                                     ->getOccupyingPiece();
-                        if(  (castling_piece != nullptr)
-                           &&(castling_piece->isPieceFirstMove() == true))
+                        castling_piece = board->getPlaceByCoord(COLUMN_A, this_row)->getOccupyingPiece();
+                        if((castling_piece != nullptr) && (castling_piece->isPieceFirstMove() == true))
                         {
                             returned = LEFT_CASTLE;
                         }

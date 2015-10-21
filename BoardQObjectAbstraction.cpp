@@ -7,8 +7,7 @@
 #include <fstream>
 #include "Serialization.h"
 
-BoardQObjectAbstraction::BoardQObjectAbstraction
-                                             (QObject *parent) : QObject(parent)
+BoardQObjectAbstraction::BoardQObjectAbstraction(QObject *parent) : QObject(parent)
 {
     this->board = nullptr;
     this->selectedPlace = nullptr;
@@ -49,13 +48,11 @@ bool BoardQObjectAbstraction::selectSquare(int column, int row)
     if(this->board != nullptr)
     {
         selectedPlace = board->getPlaceByCoord(column, row);
-        if(  (tempPlace != nullptr)
-           &&(tempPlace->getOccupyingPiece() != nullptr))
+        if((tempPlace != nullptr) && (tempPlace->getOccupyingPiece() != nullptr))
         {
             moveAccepted = board->movePiece(tempPlace, this->selectedPlace);
         }
-        if(  (selectedPlace->getOccupyingPiece() == nullptr)
-           ||(moveAccepted == true))
+        if((selectedPlace->getOccupyingPiece() == nullptr) || (moveAccepted == true))
         {
             selectedPlace = nullptr;
         }
@@ -73,9 +70,7 @@ void BoardQObjectAbstraction::startANew()
     this->selectedPlace = nullptr;
 }
 
-bool BoardQObjectAbstraction::getPieceLetterAndSide(const int column,
-                                                    const int row,
-                                                    QObject* square)
+bool BoardQObjectAbstraction::getPieceLetterAndSide(const int column, const int row, QObject* square)
 {
     bool returned = false;
     if(this->board != nullptr)

@@ -3,8 +3,7 @@
 #include "Board.h"
 #include "Pawn.h"
 
-Pawn::Pawn(side_t c_side, Place* place, Board* c_board)
-    : IPiece(c_side, place, c_board, true)
+Pawn::Pawn(side_t c_side, Place* place, Board* c_board) : IPiece(c_side, place, c_board, true)
 {
 }
 
@@ -37,9 +36,7 @@ MoveType Pawn::checkMoveAllowed(Place *place)
     {
         if(  (place->getOccupyingPiece() == nullptr)
            &&(  (diff_row == 1)
-              ||(  (diff_row == 2)
-                 &&(isFirstMove == true)
-                 &&(board->isPathClear(piecePlace, place) == true))))
+              ||((diff_row == 2) && (isFirstMove == true) && (board->isPathClear(piecePlace, place) == true))))
         {
             returned = ALLOWED;
         }
@@ -57,15 +54,10 @@ MoveType Pawn::checkMoveAllowed(Place *place)
             board->getLastMoveCoord(&last_move_column, &last_move_row);
             if((this_row == last_move_row) && (next_column == last_move_column))
             {
-                /* in this case adjacent piece cannot be a nullptr since it's
-                 * in the last move coordinate, unless it's the first move,
-                 * and if it's the first move the pawn can't be in the
-                 * en-passant row */
-                IPiece * adjacent_piece  =
-                        board->getPlaceByCoord(next_column, this_row)
-                             ->getOccupyingPiece();
-                if(  (adjacent_piece->isPiecePawn() == true)
-                   &&(adjacent_piece->isPieceFirstMove() == true))
+                /* in this case adjacent piece cannot be a nullptr since it's in the last move coordinate, unless it's
+                 * the first move, and if it's the first move the pawn can't be in the en-passant row */
+                IPiece * adjacent_piece = board->getPlaceByCoord(next_column, this_row)->getOccupyingPiece();
+                if((adjacent_piece->isPiecePawn() == true) && (adjacent_piece->isPieceFirstMove() == true))
                 {
                     returned = EN_PASSANT;
                 }

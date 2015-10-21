@@ -16,9 +16,7 @@ public:
     Q_INVOKABLE void stopGame(void);
     Q_INVOKABLE bool selectSquare(int column, int row);
     Q_INVOKABLE void startANew(void);
-    Q_INVOKABLE bool getPieceLetterAndSide(int column,
-                                           int row,
-                                           QObject *square);
+    Q_INVOKABLE bool getPieceLetterAndSide(int column, int row, QObject *square);
     Q_INVOKABLE void saveGame(QObject *obj);
     Q_INVOKABLE bool loadGame(QObject *obj);
     Q_INVOKABLE bool canMoveNext(void);

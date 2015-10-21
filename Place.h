@@ -9,9 +9,7 @@ class Place
 {
 public:
     Place(coord_t column, coord_t row);
-    Place(coord_t column,
-          coord_t row,
-          IPiece* piece);
+    Place(coord_t column, coord_t row, IPiece* piece);
     ~Place(void);
     void setOccupyingPiece(IPiece* piece);
     IPiece* getOccupyingPiece(void);

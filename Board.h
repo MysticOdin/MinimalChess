@@ -27,17 +27,9 @@ public:
     bool movePrevious(void);
     check_status_t getCheckStatus(void);
 private:
-    void appendMove(Place* src,
-                    Place* dist,
-                    IPiece* capturedPiece,
-                    MoveType mt);
-    bool checkKingAndAppendMove(Place *src,
-                                Place *dist,
-                                Place *capturedPiecePlace,
-                                MoveType mt);
-    bool willKingBeChecked(Place *src,
-                           Place *dist,
-                           Place *capturedPiecePlace);
+    void appendMove(Place* src, Place* dist, IPiece* capturedPiece, MoveType mt);
+    bool checkKingAndAppendMove(Place *src, Place *dist, Place *capturedPiecePlace, MoveType mt);
+    bool willKingBeChecked(Place *src, Place *dist, Place *capturedPiecePlace);
     Place* board[8][8];
     King* kings[2];
     side_t turn;

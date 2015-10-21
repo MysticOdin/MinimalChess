@@ -1,8 +1,7 @@
 #include "Rook.h"
 #include "Board.h"
 #include "Place.h"
-Rook::Rook(side_t c_side, Place* place, Board* c_board)
-    : IPiece(c_side, place, c_board, false)
+Rook::Rook(side_t c_side, Place* place, Board* c_board) : IPiece(c_side, place, c_board, false)
 {
 }
 
